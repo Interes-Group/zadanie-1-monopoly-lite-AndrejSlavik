@@ -20,22 +20,23 @@ public class Players {
 
 
     // PLAYER METHODS
-    public boolean IsAlive() {
-    if (this.currentMoney < 0) {
-        this.setOwnership(null);
+    public boolean IsAlive(int i, Players[] player) {
+        if (player[i].getCurrentMoney() < 0) {
+            player[i].setOwnership(null);
+            System.out.println(player[i].getName() + " DEFEATED!");
             return false;
         }
         return true;
     }
 
-    public Players[] initializePlayers(Players[] player) {
+    public Players[] InitializePlayers(Players[] player) {
         System.out.println("Enter number of players: ");
         setPlayerCount(KeyboardInput.readInt());
         player = new Players[getPlayerCount()];
         for (int i = 0 ; i != playerCount; i++) {
             System.out.println("Enter name of the " + (i+1) + ". player:");
             String name = KeyboardInput.readString();
-            player[i] = new Players(name,10000,1,IsAlive(), null);
+            player[i] = new Players(name,10000,1,true, null);
         }
         return player;
     }
