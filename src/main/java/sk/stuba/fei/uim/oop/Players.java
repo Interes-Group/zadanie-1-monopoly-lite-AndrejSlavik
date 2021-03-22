@@ -2,7 +2,7 @@ package sk.stuba.fei.uim.oop;
 
 public class Players {
     //VARIABLES
-    private Players player;
+    private Players[] player;
     private String name;
     private int currentMoney;
     private int placeOnDeck;
@@ -28,12 +28,12 @@ public class Players {
         return true;
     }
 
-    public Players[] initializePlayers() {
+    public Players[] initializePlayers(Players[] player) {
         System.out.println("Enter number of players: ");
-        playerCount = KeyboardInput.readInt();
-        Players[] player= new Players[getPlayerCount()];
-        for (int i = 0 ; i < playerCount; i++) {
-            System.out.println("Enter name of the " + i + ". player:");
+        setPlayerCount(KeyboardInput.readInt());
+        player = new Players[getPlayerCount()];
+        for (int i = 0 ; i != playerCount; i++) {
+            System.out.println("Enter name of the " + (i+1) + ". player:");
             String name = KeyboardInput.readString();
             player[i] = new Players(name,10000,1,IsAlive(), null);
         }
@@ -90,14 +90,8 @@ public class Players {
         return ownership;
     }
 
-    public Players getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Players player) {
-        this.player = player;
-    }
-
     //CONSTRUCTORS
 
+    public Players() {
+    }
 }
