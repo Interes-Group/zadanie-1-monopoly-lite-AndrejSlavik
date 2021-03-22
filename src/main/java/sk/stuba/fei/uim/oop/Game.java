@@ -13,13 +13,15 @@ public class Game extends Players{
         clearScreen();
         System.out.println("Hraci: ");
         for (int i = 0; i < getPlayerCount(); i++) {
-            System.out.println(player[i].getName());
+            System.out.print(player[i].getName() + "  ");
         }
+        System.out.println();
+
         while (isGameOver() != true){
             for (int i = 0; i < getPlayerCount() && IsAlive(i,player)!=false; i++) {
                 System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 System.out.println("It's " + player[i].getName() + "'s turn!");
-                System.out.println("Press ANY KEY to throw die!");
+                System.out.println("Press ENTER to throw die!");
                 KeyboardInput.readString();
                 int dice = dieThrow();
                 System.out.println(player[i].getName() + " threw: " + dice);
@@ -28,13 +30,12 @@ public class Game extends Players{
                     player[i].setPlaceOnDeck(((player[i].getPlaceOnDeck())+dice)%24);
                     Actions action = new Actions();
                     action.Start(i,player);
-                    System.out.println(" -> " + (player[i].getPlaceOnDeck()));
                 }
                 else {
-                    System.out.println(" -> " + (player[i].getPlaceOnDeck() + dice));
+                    player[i].setPlaceOnDeck(player[i].getPlaceOnDeck() + dice);
                 }
+                System.out.println(" -> " + (player[i].getPlaceOnDeck()));
                 System.out.println(player[i].getName() + "'s balance: " + player[i].getCurrentMoney());
-                player[i].setPlaceOnDeck(player[i].getPlaceOnDeck()+dice);
 
                 whichAction(i, player);
             }

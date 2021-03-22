@@ -49,19 +49,16 @@ public class Actions extends Game {
     }
     public void Police(int i, Players[] player) {
         System.out.println(player[i].getName() + " was sent to Prison by Police!");
-        player[i].setPlaceOnDeck(7);
         System.out.println(player[i].getName() + "'s position: " + player[i].getPlaceOnDeck());
+        player[i].setPlaceOnDeck(7);
+        System.out.println(" -> " + player[i].getPlaceOnDeck());
     }
     public void Taxes(int i, Players[] player) {
         System.out.println(player[i].getName() + " must pay 2000 EURO for taxes! ");
-        player[i].setCurrentMoney(getCurrentMoney() - 2000);
-        if (player[i].getCurrentMoney() >= 2000) {
-            System.out.println(player[i].getName() + "'s balance: " + player[i].getCurrentMoney());
-        }
-        else {
-            System.out.println(player[i].getName() + " doesn't have enough money!");
-            IsAlive(i,player);
-        }
+        player[i].setCurrentMoney(player[i].getCurrentMoney() - 2000);
+        System.out.println(player[i].getName() + "'s balance: " + player[i].getCurrentMoney());
+        IsAlive(i,player);
+
     }
     public void Chance(int i, Players[] player) {
 

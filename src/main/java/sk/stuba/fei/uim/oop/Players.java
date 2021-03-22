@@ -23,7 +23,7 @@ public class Players {
     public boolean IsAlive(int i, Players[] player) {
         if (player[i].getCurrentMoney() < 0) {
             player[i].setOwnership(null);
-            System.out.println(player[i].getName() + " DEFEATED!");
+            System.out.println(player[i].getName() + " doesn't have enough money! DEFEATED!");
             return false;
         }
         return true;
