@@ -9,7 +9,7 @@ public class Game extends Players{
     public void GameStart() {
         Players[] player = new Players[getPlayerCount()];
         player = InitializePlayers(player);
-        System.out.println("Hraci: ");
+        System.out.println("Players: ");
         for (int i = 0; i < getPlayerCount(); i++) {
             System.out.print(player[i].getName() + ", ");
         }

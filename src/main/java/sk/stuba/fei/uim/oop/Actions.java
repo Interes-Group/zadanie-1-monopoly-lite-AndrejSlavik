@@ -3,13 +3,14 @@ import java.util.Arrays;
 
 public class Actions extends Game {
     private int[] property = {2,3,5,6,8,9,11,12,14,15,17,18,20,21,23,24};
-    private int police = 19;
-    private int prison = 7;
-    private int taxes = 13;
-    private int[] chance = {4,10,16,22};
+    private final int police = 19;
+    private final int prison = 7;
+    private final int taxes = 13;
+    private final int[] chance = {4,10,16,22};
 
     public void Property(int i, Players[] player, int playerCount) {
         int price = 0;
+
         switch(player[i].getPlaceOnDeck()) {
             case 2: case 6: case 14: case 18: case 21: case 24:
                 price = 2000;
@@ -25,34 +26,33 @@ public class Actions extends Game {
                 break;
         }
 
+        boolean block = false;
+
         for (int x = 0; x < playerCount; x++) {
-            boolean block = false;
             for (int number: player[x].getOwnership()) {
                 if ((player[i].getPlaceOnDeck() == number) && (x == i)) {
                     System.out.println("You visited your own property! Continuing...");
 
                     block = true;
                 }
-                if ((player[i].getPlaceOnDeck() == number) && (x != i)) {
+                else if ((player[i].getPlaceOnDeck() == number) && (x != i)) {
                     System.out.println("This property is owned by " + player[x].getName());
-                    System.out.println("You must pay 1/4 price of property for visiting! Price:" + (price / 4));
+                    System.out.println("You must pay 1/3 price of property for visiting! Price:" + (price / 3));
 
-                    player[i].setCurrentMoney(player[i].getCurrentMoney() - (price / 4));
+                    player[i].setCurrentMoney(player[i].getCurrentMoney() - (price / 3));
+                    player[x].setCurrentMoney(player[x].getCurrentMoney() + (price / 3));
 
                     System.out.println(player[i].getName() + "'s balance: " + player[i].getCurrentMoney());
 
                     IsAlive(i, player);
                     block = true;
                 }
-                break;
-            }
-            for (int number: player[x].getOwnership()) {
-                if ((player[i].getPlaceOnDeck() != number) && (x == (playerCount - 1)) && (!block)) {
+                else if ((player[i].getPlaceOnDeck() != number) && (x == (playerCount - 1)) && (!block)) {
                     System.out.println("Nobody owns this property. Buy or continue? COST: " + price + " (Type '1' if yes, '0' if continue): ");
 
                     int buyOrContinue = KeyboardInput.readInt();
                     if (buyOrContinue == 1) {
-                        if ((player[i].getCurrentMoney() - price) > 0) {
+                        if ((player[i].getCurrentMoney() - price) >= 0) {
                             player[i].setCurrentMoney(player[i].getCurrentMoney() - price);
                             player[i].setOwnership(Arrays.copyOf(player[i].getOwnership(), player[i].getOwnership().length + 1));
                             player[i].setOwnership(player[i].getPlaceOnDeck(), player[i].getOwnership().length - 1);
@@ -67,8 +67,8 @@ public class Actions extends Game {
                         System.out.println("Continuing... ");
                     }
                     propertyCheck(i,player);
+                    block = true;
                 }
-                break;
             }
         }
     }
@@ -87,9 +87,9 @@ public class Actions extends Game {
     }
 
     public void Taxes(int i, Players[] player) {
-        System.out.println(player[i].getName() + " must pay 2000 EURO for taxes! ");
+        System.out.println(player[i].getName() + " must pay 2500 EURO for taxes! ");
 
-        player[i].setCurrentMoney(player[i].getCurrentMoney() - 2000);
+        player[i].setCurrentMoney(player[i].getCurrentMoney() - 2500);
 
         System.out.println(player[i].getName() + "'s balance: " + player[i].getCurrentMoney());
 

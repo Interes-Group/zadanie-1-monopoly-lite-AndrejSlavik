@@ -2,7 +2,6 @@ package sk.stuba.fei.uim.oop;
 
 public class Players {
     //VARIABLES
-    private Players[] player;
     private String name;
     private int currentMoney;
     private int placeOnDeck;
@@ -23,10 +22,10 @@ public class Players {
 
     // PLAYER METHODS
     public boolean IsAlive(int i, Players[] player) {
-        if (player[i].getCurrentMoney() <= 0) {
-            player[i].setOwnership(null);
+        if (player[i].getCurrentMoney() < 0 && player[i].getAlive()) {
+            player[i].setOwnership(new int[] {0});
             System.out.println(player[i].getName() + " doesn't have enough money! DEFEATED!");
-            setAlive(false);
+            player[i].setAlive(false);
             return false;
         }
         return true;
@@ -39,7 +38,7 @@ public class Players {
         for (int i = 0 ; i != playerCount; i++) {
             System.out.println("Enter name of the " + (i+1) + ". player:");
             String name = KeyboardInput.readString();
-            player[i] = new Players(name,10000,1,true, new int[]{0}, 0);
+            player[i] = new Players(name,12500,1,true, new int[]{0}, 0);
         }
         return player;
     }
@@ -55,10 +54,6 @@ public class Players {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setPlayerCount(int playerCount) {
@@ -82,10 +77,6 @@ public class Players {
         return playerCount;
     }
 
-    public boolean isAlive() {
-        return alive;
-    }
-
     public String getName() {
         return name;
     }
@@ -104,6 +95,10 @@ public class Players {
 
     public int getInPrison() {
         return inPrison;
+    }
+
+    public boolean getAlive() {
+        return alive;
     }
 
     //CONSTRUCTORS
