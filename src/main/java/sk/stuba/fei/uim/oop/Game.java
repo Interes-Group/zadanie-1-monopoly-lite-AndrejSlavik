@@ -3,70 +3,87 @@ import java.lang.Math;
 
 public class Game extends Players{
     private final int deckPlacesCount = 24;
-    private boolean gameOver = isGameOver();
-    private int alivePlayers;
+    private int alivePlayers = 0;
 
 
     public void GameStart() {
         Players[] player = new Players[getPlayerCount()];
         player = InitializePlayers(player);
-        clearScreen();
         System.out.println("Hraci: ");
         for (int i = 0; i < getPlayerCount(); i++) {
-            System.out.print(player[i].getName() + "  ");
+            System.out.print(player[i].getName() + ", ");
         }
         System.out.println();
+        System.out.println("GAME STARTS!");
 
-        while (isGameOver() != true){
-            for (int i = 0; i < getPlayerCount() && IsAlive(i,player)!=false; i++) {
-                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                System.out.println("It's " + player[i].getName() + "'s turn!");
-                System.out.println("Press ENTER to throw die!");
-                KeyboardInput.readString();
-                int dice = dieThrow();
-                System.out.println(player[i].getName() + " threw: " + dice);
-                System.out.print("Position: " + player[i].getPlaceOnDeck());
-                if ((player[i].getPlaceOnDeck()+dice)>24) {
-                    player[i].setPlaceOnDeck(((player[i].getPlaceOnDeck())+dice)%24);
-                    Actions action = new Actions();
-                    action.Start(i,player);
-                }
-                else {
-                    player[i].setPlaceOnDeck(player[i].getPlaceOnDeck() + dice);
-                }
-                System.out.println(" -> " + (player[i].getPlaceOnDeck()));
-                System.out.println(player[i].getName() + "'s balance: " + player[i].getCurrentMoney());
+        while (!isGameOver(player)){
+            for (int i = 0; i < getPlayerCount(); i++) {
+                if (IsAlive(i,player)==true) {
+                    if (player[i].getInPrison() == 0) {
+                        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        System.out.println("It's " + player[i].getName() + "'s turn!");
+                        System.out.println("Press ENTER to throw die!");
+                        KeyboardInput.readString();
+                        int dice = dieThrow();
+                        System.out.println(player[i].getName() + " threw: " + dice);
+                        System.out.print("Position: " + player[i].getPlaceOnDeck());
+                        if ((player[i].getPlaceOnDeck() + dice) > 24) {
+                            player[i].setPlaceOnDeck(((player[i].getPlaceOnDeck()) + dice) % 24);
+                            System.out.println(" -> " + (player[i].getPlaceOnDeck()));
+                            Actions action = new Actions();
+                            action.Start(i, player);
+                        } else {
+                            player[i].setPlaceOnDeck(player[i].getPlaceOnDeck() + dice);
+                            System.out.println(" -> " + (player[i].getPlaceOnDeck()));
+                        }
+                        System.out.println(player[i].getName() + "'s balance: " + player[i].getCurrentMoney());
 
-                whichAction(i, player);
+                        propertyCheck(i,player);
+
+                        whichAction(i, player);
+                    }
+                    else {
+                        player[i].setInPrison(player[i].getInPrison()-1);
+                    }
+                }
             }
         }
     }
 
-
-    public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+    public void propertyCheck(int i, Players[] player) {
+        System.out.print(player[i].getName() + "'s property: [");
+        for (int num: player[i].getOwnership()){
+            System.out.print(num + ", ");
+        }
+        System.out.println("]");
     }
 
-    public boolean isGameOver() {
+
+    public boolean isGameOver(Players[] player) {
+        String victoriousPlayer = "";
+        alivePlayers = 0;
         for (int i = 0; i < getPlayerCount(); i++) {
-            if (isAlive() == true) {
-                alivePlayers =+ 1;
-                setAlivePlayers(alivePlayers);
+            if (IsAlive(i,player) == true) {
+
+                alivePlayers = alivePlayers + 1;
+                victoriousPlayer = player[i].getName();
             }
         }
-        if (alivePlayers == 1) {
+        setAlivePlayers(alivePlayers);
+        if (getAlivePlayers() == 1) {
+            System.out.print(victoriousPlayer + "'s VICTORIOUS! GAME OVER!");
             return true;
         }
         return false;
     }
 
     public void whichAction(int i, Players[] player) {
+        int playerCount = getPlayerCount();
         Actions action = new Actions();
         switch (player[i].getPlaceOnDeck()) {
             case 2: case 3: case 5: case 6: case 8: case 9: case 11: case 12: case 14: case 15: case 17: case 18: case 20: case 21: case 23: case 24:
                 action = new Actions();
-                action.Property(i, player);
+                action.Property(i, player, playerCount);
                 break;
             case 4: case 10: case 16: case 22:
                 action = new Actions();

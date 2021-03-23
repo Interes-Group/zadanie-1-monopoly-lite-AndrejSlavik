@@ -9,21 +9,24 @@ public class Players {
     private boolean alive;
     private int playerCount;
     private int[] ownership;
+    private int inPrison;
 
-    public Players(String name, int currentMoney, int placeOnDeck, boolean alive, int[] ownership) {
+    public Players(String name, int currentMoney, int placeOnDeck, boolean alive, int[] ownership, int inPrison) {
         this.name = name;
         this.currentMoney = currentMoney;
         this.placeOnDeck = placeOnDeck;
         this.alive = alive;
         this.ownership = ownership;
+        this.inPrison = inPrison;
     }
 
 
     // PLAYER METHODS
     public boolean IsAlive(int i, Players[] player) {
-        if (player[i].getCurrentMoney() < 0) {
+        if (player[i].getCurrentMoney() <= 0) {
             player[i].setOwnership(null);
             System.out.println(player[i].getName() + " doesn't have enough money! DEFEATED!");
+            setAlive(false);
             return false;
         }
         return true;
@@ -36,7 +39,7 @@ public class Players {
         for (int i = 0 ; i != playerCount; i++) {
             System.out.println("Enter name of the " + (i+1) + ". player:");
             String name = KeyboardInput.readString();
-            player[i] = new Players(name,10000,1,true, null);
+            player[i] = new Players(name,10000,1,true, new int[]{0}, 0);
         }
         return player;
     }
@@ -66,6 +69,14 @@ public class Players {
         this.ownership = ownership;
     }
 
+    public void setOwnership(int ownership, int i) {
+        this.ownership[i] = ownership;
+    }
+
+    public void setInPrison(int inPrison) {
+        this.inPrison = inPrison;
+    }
+
     //GETTERS
     public int getPlayerCount() {
         return playerCount;
@@ -89,6 +100,10 @@ public class Players {
 
     public int[] getOwnership() {
         return ownership;
+    }
+
+    public int getInPrison() {
+        return inPrison;
     }
 
     //CONSTRUCTORS
