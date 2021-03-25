@@ -18,7 +18,7 @@ public class Game extends Players{
 
         while (!isGameOver(player)){
             for (int i = 0; i < getPlayerCount(); i++) {
-                if (IsAlive(i,player)==true) {
+                if (player[i].getAlive()==true) {
                     if (player[i].getInPrison() == 0) {
                         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                         System.out.println("It's " + player[i].getName() + "'s turn!");
@@ -58,12 +58,11 @@ public class Game extends Players{
         System.out.println("]");
     }
 
-
     public boolean isGameOver(Players[] player) {
         String victoriousPlayer = "";
-        alivePlayers = 0;
+        setAlivePlayers(0);
         for (int i = 0; i < getPlayerCount(); i++) {
-            if (IsAlive(i,player) == true) {
+            if (player[i].getAlive() == true) {
 
                 alivePlayers = alivePlayers + 1;
                 victoriousPlayer = player[i].getName();

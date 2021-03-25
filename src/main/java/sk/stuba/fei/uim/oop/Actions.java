@@ -30,12 +30,14 @@ public class Actions extends Game {
 
         for (int x = 0; x < playerCount; x++) {
             for (int number: player[x].getOwnership()) {
-                if ((player[i].getPlaceOnDeck() == number) && (x == i)) {
+                if ((player[i].getPlaceOnDeck() == number) && (x == i) && (!block)) {
                     System.out.println("You visited your own property! Continuing...");
 
                     block = true;
                 }
-                else if ((player[i].getPlaceOnDeck() == number) && (x != i)) {
+            }
+            for (int number: player[x].getOwnership()) {
+                if ((player[i].getPlaceOnDeck() == number) && (x != i) && (!block)) {
                     System.out.println("This property is owned by " + player[x].getName());
                     System.out.println("You must pay 1/3 price of property for visiting! Price:" + (price / 3));
 
@@ -47,7 +49,9 @@ public class Actions extends Game {
                     IsAlive(i, player);
                     block = true;
                 }
-                else if ((player[i].getPlaceOnDeck() != number) && (x == (playerCount - 1)) && (!block)) {
+            }
+            for (int number: player[x].getOwnership()) {
+                if ((player[i].getPlaceOnDeck() != number) && (x == (playerCount - 1)) && (!block)) {
                     System.out.println("Nobody owns this property. Buy or continue? COST: " + price + " (Type '1' if yes, '0' if continue): ");
 
                     int buyOrContinue = KeyboardInput.readInt();
@@ -79,7 +83,7 @@ public class Actions extends Game {
 
     public void Police(int i, Players[] player) {
         player[i].setInPrison((int)(Math.random()*(3)+1));
-        System.out.println(player[i].getName() + " was sent to Prison by Police for " + player[i].getInPrison() + " rounds!");
+        System.out.println(player[i].getName() + " was sent to Prison by Police for " + player[i].getInPrison() + " round(s)!");
         System.out.print(player[i].getName() + "'s position: " + player[i].getPlaceOnDeck());
 
         player[i].setPlaceOnDeck(7);
@@ -101,9 +105,9 @@ public class Actions extends Game {
 
     }
     public void Start(int i, Players[] player) {
-        System.out.println("Start was crossed! +5000 EURO");
+        System.out.println("Start was crossed! +4000 EURO");
 
-        player[i].setCurrentMoney(player[i].getCurrentMoney()+5000);
+        player[i].setCurrentMoney(player[i].getCurrentMoney()+4000);
     }
 
 }

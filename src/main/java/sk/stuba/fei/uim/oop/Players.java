@@ -21,14 +21,12 @@ public class Players {
 
 
     // PLAYER METHODS
-    public boolean IsAlive(int i, Players[] player) {
-        if (player[i].getCurrentMoney() < 0 && player[i].getAlive()) {
+    public void IsAlive(int i, Players[] player) {
+        if ((player[i].getCurrentMoney() < 0) && player[i].getAlive()) {
             player[i].setOwnership(new int[] {0});
             System.out.println(player[i].getName() + " doesn't have enough money! DEFEATED!");
             player[i].setAlive(false);
-            return false;
         }
-        return true;
     }
 
     public Players[] InitializePlayers(Players[] player) {
