@@ -1,53 +1,71 @@
 package sk.stuba.fei.uim.oop;
+
+import sk.stuba.fei.uim.oop.actions.*;
+
 import java.lang.Math;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Game extends Players{
-    private final int deckPlacesCount = 24;
     private int alivePlayers = 0;
+    private Integer[] chanceCardsOrder = {1,2,3,4,5};
 
 
     public void GameStart() {
-        Players[] player = new Players[getPlayerCount()];
-        player = InitializePlayers(player);
-        System.out.println("Players: ");
-        for (int i = 0; i < getPlayerCount(); i++) {
-            System.out.print(player[i].getName() + ", ");
-        }
+        Players[] player = playerInitialize();
+        randomChanceOrder();
         System.out.println();
         System.out.println("GAME STARTS!");
 
         while (!isGameOver(player)){
             for (int i = 0; i < getPlayerCount(); i++) {
                 if (player[i].getAlive()==true) {
-                    if (player[i].getInPrison() == 0) {
-                        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                        System.out.println("It's " + player[i].getName() + "'s turn!");
-                        System.out.println("Press ENTER to throw die!");
-                        KeyboardInput.readString();
-                        int dice = dieThrow();
-                        System.out.println(player[i].getName() + " threw: " + dice);
-                        System.out.print("Position: " + player[i].getPlaceOnDeck());
-                        if ((player[i].getPlaceOnDeck() + dice) > 24) {
-                            player[i].setPlaceOnDeck(((player[i].getPlaceOnDeck()) + dice) % 24);
-                            System.out.println(" -> " + (player[i].getPlaceOnDeck()));
-                            Actions action = new Actions();
-                            action.Start(i, player);
-                        } else {
-                            player[i].setPlaceOnDeck(player[i].getPlaceOnDeck() + dice);
-                            System.out.println(" -> " + (player[i].getPlaceOnDeck()));
-                        }
-                        System.out.println(player[i].getName() + "'s balance: " + player[i].getCurrentMoney());
-
-                        propertyCheck(i,player);
-
-                        whichAction(i, player);
-                    }
-                    else {
-                        player[i].setInPrison(player[i].getInPrison()-1);
-                    }
+                    gameLoop(player, i);
                 }
             }
         }
+    }
+
+    public void gameLoop(Players[] player, int i) {
+        if (player[i].getInPrison() == 0) {
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            System.out.println("It's " + player[i].getName() + "'s turn!");
+            System.out.println("Press ENTER to throw die!");
+            KeyboardInput.readString();
+            int dice = dieThrow();
+            System.out.println(player[i].getName() + " threw: " + dice);
+            System.out.print("Position: " + player[i].getPlaceOnDeck());
+
+            throughStart(player, i, dice);
+
+            System.out.println(player[i].getName() + "'s balance: " + player[i].getCurrentMoney());
+
+            propertyCheck(i,player);
+
+            whichAction(i, player);
+        }
+        else {
+            player[i].setInPrison(player[i].getInPrison()-1);
+        }
+    }
+
+    public void throughStart(Players[] player, int i, int dice) {
+        if ((player[i].getPlaceOnDeck() + dice) > 24) {
+            player[i].setPlaceOnDeck(((player[i].getPlaceOnDeck()) + dice) % 24);
+            System.out.println(" -> " + (player[i].getPlaceOnDeck()));
+            Actions action = new Actions();
+            action.Start(i, player);
+        } else {
+            player[i].setPlaceOnDeck(player[i].getPlaceOnDeck() + dice);
+            System.out.println(" -> " + (player[i].getPlaceOnDeck()));
+        }
+    }
+
+    public void randomChanceOrder() {
+        List<Integer> intListChanceOrder = Arrays.asList(chanceCardsOrder);
+        Collections.shuffle(intListChanceOrder);
+        intListChanceOrder.toArray(chanceCardsOrder);
     }
 
     public void propertyCheck(int i, Players[] player) {
@@ -77,28 +95,26 @@ public class Game extends Players{
     }
 
     public void whichAction(int i, Players[] player) {
-        int playerCount = getPlayerCount();
-        Actions action = new Actions();
         switch (player[i].getPlaceOnDeck()) {
             case 2: case 3: case 5: case 6: case 8: case 9: case 11: case 12: case 14: case 15: case 17: case 18: case 20: case 21: case 23: case 24:
-                action = new Actions();
-                action.Property(i, player, playerCount);
+                Property property = new Property();
+                property.Property(player, i, getPlayerCount());
                 break;
             case 4: case 10: case 16: case 22:
-                action = new Actions();
-                action.Chance(i, player);
+                Chance chance = new Chance();
+                chance.Chance(player, i, chanceCardsOrder);
                 break;
             case 7:
-                action = new Actions();
-                action.Prison(i, player);
+                Prison prison = new Prison();
+                prison.Prison(player, i);
                 break;
             case 13:
-                action = new Actions();
-                action.Taxes(i, player);
+                Taxes taxes = new Taxes();
+                taxes.Taxes(player, i);
                 break;
             case 19:
-                action = new Actions();
-                action.Police(i, player);
+                Police police = new Police();
+                police.Police(player, i);
                 break;
         }
     }
@@ -114,4 +130,9 @@ public class Game extends Players{
     public void setAlivePlayers(int alivePlayers) {
         this.alivePlayers = alivePlayers;
     }
+
+    public Integer[] getChanceCardsOrder() {
+        return chanceCardsOrder;
+    }
+
 }

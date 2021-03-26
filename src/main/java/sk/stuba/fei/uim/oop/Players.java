@@ -1,5 +1,7 @@
 package sk.stuba.fei.uim.oop;
 
+import sk.stuba.fei.uim.oop.actions.*;
+
 public class Players {
     //VARIABLES
     private String name;
@@ -21,6 +23,17 @@ public class Players {
 
 
     // PLAYER METHODS
+
+    public Players[] playerInitialize() {
+        Players[] player = new Players[getPlayerCount()];
+        player = InitializePlayers(player);
+        System.out.println("Players: ");
+        for (int i = 0; i < getPlayerCount(); i++) {
+            System.out.print(player[i].getName() + ", ");
+        }
+        return player;
+    }
+
     public void IsAlive(int i, Players[] player) {
         if ((player[i].getCurrentMoney() < 0) && player[i].getAlive()) {
             player[i].setOwnership(new int[] {0});
@@ -31,7 +44,9 @@ public class Players {
 
     public Players[] InitializePlayers(Players[] player) {
         System.out.println("Enter number of players: ");
-        setPlayerCount(KeyboardInput.readInt());
+        playerCount = KeyboardInput.readInt();
+        setPlayerCount(playerCount);
+        System.out.println("hraci=" + getPlayerCount());
         player = new Players[getPlayerCount()];
         for (int i = 0 ; i != playerCount; i++) {
             System.out.println("Enter name of the " + (i+1) + ". player:");
