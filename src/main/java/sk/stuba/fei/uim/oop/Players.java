@@ -47,7 +47,7 @@ public class Players {
         for (int i = 0 ; i != playerCount; i++) {
             System.out.println("Enter name of the " + (i+1) + ". player:");
             String name = KeyboardInput.readString();
-            player[i] = new Players(name,12500,1,true, new int[]{0}, 0);
+            player[i] = new Players(name,10000,1,true, new int[]{0}, 0);
         }
         return player;
     }
