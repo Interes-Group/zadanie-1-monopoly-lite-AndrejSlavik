@@ -8,10 +8,10 @@ public class Lottery {
         int money = 0;
         switch(prize){
             case 1:
-                money = 5000;
+                money = 4000;
                 break;
             case 2:
-                money = 2500;
+                money = 2000;
                 break;
             case 3:
                 money = 1500;

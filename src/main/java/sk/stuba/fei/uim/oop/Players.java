@@ -1,7 +1,5 @@
 package sk.stuba.fei.uim.oop;
 
-import sk.stuba.fei.uim.oop.actions.*;
-
 public class Players {
     //VARIABLES
     private String name;
@@ -25,8 +23,7 @@ public class Players {
     // PLAYER METHODS
 
     public Players[] playerInitialize() {
-        Players[] player = new Players[getPlayerCount()];
-        player = InitializePlayers(player);
+        Players[] player = InitializePlayers();
         System.out.println("Players: ");
         for (int i = 0; i < getPlayerCount(); i++) {
             System.out.print(player[i].getName() + ", ");
@@ -42,12 +39,11 @@ public class Players {
         }
     }
 
-    public Players[] InitializePlayers(Players[] player) {
+    public Players[] InitializePlayers() {
         System.out.println("Enter number of players: ");
         playerCount = KeyboardInput.readInt();
         setPlayerCount(playerCount);
-        System.out.println("hraci=" + getPlayerCount());
-        player = new Players[getPlayerCount()];
+        Players[] player = new Players[getPlayerCount()];
         for (int i = 0 ; i != playerCount; i++) {
             System.out.println("Enter name of the " + (i+1) + ". player:");
             String name = KeyboardInput.readString();

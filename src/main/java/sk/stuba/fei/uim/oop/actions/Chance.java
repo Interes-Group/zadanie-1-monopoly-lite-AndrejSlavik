@@ -2,11 +2,12 @@ package sk.stuba.fei.uim.oop.actions;
 
 import sk.stuba.fei.uim.oop.Players;
 import sk.stuba.fei.uim.oop.chance.*;
+import sk.stuba.fei.uim.oop.Game;
 
-public class Chance {
-    private int counter = 1;
-    public void Chance(Players[] player, int i, Integer[] chanceCardsOrder) {
-        switch (chanceCardsOrder[getCounter()]){
+public class Chance extends Game{
+
+    public void Chance(Players[] player, int i, Integer[] chanceCardsOrder, int counter) {
+        switch (chanceCardsOrder[counter]){
             case 1:
                 Barber barber = new Barber();
                 barber.Barber(player, i);
@@ -28,19 +29,5 @@ public class Chance {
                 weather.Weather(player, i);
                 break;
         }
-        if(getCounter() != 5 ) {
-            setCounter(getCounter()+1);
-        }
-        else {
-            setCounter(1);
-        }
-    }
-
-    public int getCounter() {
-        return counter;
-    }
-
-    public void setCounter(int counter) {
-        this.counter = counter;
     }
 }

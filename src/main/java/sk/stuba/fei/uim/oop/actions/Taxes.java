@@ -10,7 +10,5 @@ public class Taxes{
 
         System.out.println(player[i].getName() + "'s balance: " + player[i].getCurrentMoney());
 
-        /*IsAlive(i,player);*/
-
     }
 }

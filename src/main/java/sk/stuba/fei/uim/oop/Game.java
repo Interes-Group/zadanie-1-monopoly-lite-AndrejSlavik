@@ -10,6 +10,8 @@ import java.util.List;
 public class Game extends Players{
     private int alivePlayers = 0;
     private Integer[] chanceCardsOrder = {1,2,3,4,5};
+    private int counter = 0;
+    private boolean endGame = false;
 
 
     public void GameStart() {
@@ -20,8 +22,11 @@ public class Game extends Players{
 
         while (!isGameOver(player)){
             for (int i = 0; i < getPlayerCount(); i++) {
-                if (player[i].getAlive()==true) {
+                if (player[i].getAlive()) {
                     gameLoop(player, i);
+                }
+                if (isEndGame()) {
+                    break;
                 }
             }
         }
@@ -54,8 +59,8 @@ public class Game extends Players{
         if ((player[i].getPlaceOnDeck() + dice) > 24) {
             player[i].setPlaceOnDeck(((player[i].getPlaceOnDeck()) + dice) % 24);
             System.out.println(" -> " + (player[i].getPlaceOnDeck()));
-            Actions action = new Actions();
-            action.Start(i, player);
+            Start start = new Start();
+            start.Start(i, player);
         } else {
             player[i].setPlaceOnDeck(player[i].getPlaceOnDeck() + dice);
             System.out.println(" -> " + (player[i].getPlaceOnDeck()));
@@ -80,8 +85,7 @@ public class Game extends Players{
         String victoriousPlayer = "";
         setAlivePlayers(0);
         for (int i = 0; i < getPlayerCount(); i++) {
-            if (player[i].getAlive() == true) {
-
+            if (player[i].getAlive()) {
                 alivePlayers = alivePlayers + 1;
                 victoriousPlayer = player[i].getName();
             }
@@ -99,10 +103,24 @@ public class Game extends Players{
             case 2: case 3: case 5: case 6: case 8: case 9: case 11: case 12: case 14: case 15: case 17: case 18: case 20: case 21: case 23: case 24:
                 Property property = new Property();
                 property.Property(player, i, getPlayerCount());
+                IsAlive(i,player);
+                if (isGameOver(player)) {
+                    setEndGame(true);
+                }
                 break;
             case 4: case 10: case 16: case 22:
                 Chance chance = new Chance();
-                chance.Chance(player, i, chanceCardsOrder);
+                        chance.Chance(player, i, chanceCardsOrder, counter);
+                if(getCounter() < 4 ) {
+                    setCounter(getCounter() + 1);
+                }
+                else {
+                    setCounter(0);
+                }
+                IsAlive(i,player);
+                if (isGameOver(player)) {
+                    setEndGame(true);
+                }
                 break;
             case 7:
                 Prison prison = new Prison();
@@ -111,6 +129,10 @@ public class Game extends Players{
             case 13:
                 Taxes taxes = new Taxes();
                 taxes.Taxes(player, i);
+                IsAlive(i,player);
+                if (isGameOver(player)) {
+                    setEndGame(true);
+                }
                 break;
             case 19:
                 Police police = new Police();
@@ -131,8 +153,19 @@ public class Game extends Players{
         this.alivePlayers = alivePlayers;
     }
 
-    public Integer[] getChanceCardsOrder() {
-        return chanceCardsOrder;
+    public int getCounter() {
+        return counter;
     }
 
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    public boolean isEndGame() {
+        return endGame;
+    }
+
+    public void setEndGame(boolean endGame) {
+        this.endGame = endGame;
+    }
 }
